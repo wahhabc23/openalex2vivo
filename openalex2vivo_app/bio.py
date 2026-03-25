@@ -26,6 +26,7 @@ class BioCrosswalk:
             orcid_id_uriref = URIRef(f"http://orcid.org/{clean_orcid}")
             
             # Use confirmedOrcidId to eliminate the 'pending confirmation' UI flag
+            graph.add((person_uri, VIVO.orcidId, orcid_id_uriref))
             graph.add((person_uri, VIVO.confirmedOrcidId, orcid_id_uriref))
             graph.add((orcid_id_uriref, RDF.type, OWL.Thing))
 
