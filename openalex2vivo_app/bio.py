@@ -21,9 +21,12 @@ class BioCrosswalk:
         # Add ORCID as identifier if it exists
         orcid_url = openalex_profile.get("orcid")
         if orcid_url:
-            # e.g., "https://orcid.org/0000-0002-1825-0097"
-            orcid_id_uriref = URIRef(orcid_url)
-            graph.add((person_uri, VIVO.orcidId, orcid_id_uriref))
+            # Clean the URL to ensure VIVO doesn't double-prepend
+            clean_orcid = orcid_url.replace("https://orcid.org/", "").replace("http://orcid.org/", "")
+            orcid_id_uriref = URIRef(f"http://orcid.org/{clean_orcid}")
+            
+            # Use confirmedOrcidId to eliminate the 'pending confirmation' UI flag
+            graph.add((person_uri, VIVO.confirmedOrcidId, orcid_id_uriref))
             graph.add((orcid_id_uriref, RDF.type, OWL.Thing))
 
         # Following is vcard bio information
